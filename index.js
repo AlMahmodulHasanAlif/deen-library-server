@@ -32,7 +32,7 @@ async function run() {
     //all-books
 
     app.get("/all-books", async (req, res) => {
-      const cursor = booksCollection.find();
+      const cursor = booksCollection.find().sort({ _id: -1 });
       const result = await cursor.toArray();
       res.send(result);
     });
