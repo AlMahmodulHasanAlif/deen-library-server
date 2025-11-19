@@ -5,8 +5,6 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 3000;
 
-console.log("USER:", process.env.MONGO_USER);
-console.log("PASS:", process.env.MONGO_PASS);
 
 //middleware
 app.use(cors());
@@ -28,6 +26,15 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
+
+    const db = client.db("deen_db");
+    const booksCollection = db.collection("books");
+
+    app.post("/add-book", async (req, res) => {
+      const newBook = req.body;
+      const result = await booksCollection.insertOne(newBook);
+      res.send(result);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
