@@ -29,11 +29,25 @@ async function run() {
     const db = client.db("deen_db");
     const booksCollection = db.collection("books");
 
+    //add book
     app.post("/add-book", async (req, res) => {
       const newBook = req.body;
       const result = await booksCollection.insertOne(newBook);
       res.send(result);
     });
+
+    //update book
+    app.patch("/update-book/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedBook = req.body;
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: updatedBook,
+      };
+      const result = await booksCollection.updateOne(query, update);
+      res.send(result);
+    });
+    //delete book
     app.delete("/delete-book/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
