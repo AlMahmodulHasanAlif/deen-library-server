@@ -36,6 +36,18 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    //myBooks
+
+    app.get("/myBooks", async (req, res) => {
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.userEmail = email;
+      }
+      const cursor = booksCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     //book-details
     app.get("/book-details/:id", async (req, res) => {
