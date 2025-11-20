@@ -36,6 +36,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    //latest-books
+    app.get("/latest-books", async (req, res) => {
+      const cursor = booksCollection.find().sort({ _id: -1 }).limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     //myBooks
 
     app.get("/myBooks", async (req, res) => {
