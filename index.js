@@ -32,7 +32,16 @@ async function run() {
     //all-books
 
     app.get("/all-books", async (req, res) => {
-      const cursor = booksCollection.find().sort({ _id: -1 });
+      const sortParam = req.query.sort;
+      let sortOption = { _id: -1 };
+
+      if (sortParam === "rating_asc") {
+        sortOption = { rating: 1 };
+      } else if (sortParam === "rating_desc") {
+        sortOption = { rating: -1 };
+      }
+
+      const cursor = booksCollection.find().sort(sortOption);
       const result = await cursor.toArray();
       res.send(result);
     });
