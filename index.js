@@ -28,6 +28,29 @@ async function run() {
 
     const db = client.db("deen_db");
     const booksCollection = db.collection("books");
+    const commentsCollection = db.collection("comments");
+
+    //comments post
+    app.post("/add-comment", async (req, res) => {
+      const comment = req.body;
+      comment.createdAt = new Date();
+
+      const result = await commentsCollection.insertOne(comment);
+      res.send(result);
+    });
+
+    //comments-get
+
+    app.get("/comments/:bookId", async (req, res) => {
+      const bookId = req.params.bookId;
+
+      const result = await commentsCollection
+        .find({ bookId })
+        .sort({ createdAt: -1 })
+        .toArray();
+
+      res.send(result);
+    });
 
     //all-books
 
